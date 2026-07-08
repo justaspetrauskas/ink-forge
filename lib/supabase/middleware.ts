@@ -66,19 +66,19 @@ console.log(
   user?.email
 );
 
-const protectedRoutes = [
-  "/",
-  "/home",
-  "/profile",
-]
+const publicRoutes = [
+  "/login",
+  "/signup",
+];
 
 const pathname = request.nextUrl.pathname;
 
-const isProtectedRoute = protectedRoutes.some((route) =>
+const isPublicRoute = publicRoutes.some((route) =>
   pathname.startsWith(route)
-)
+);
 
-if (!user && isProtectedRoute) {
+
+if (!user && !isPublicRoute) {
   return NextResponse.redirect(
     new URL("/login", request.url)
   );
