@@ -54,17 +54,8 @@ export async function updateSession(request: NextRequest) {
   );
 
 
-  const {
-  data: {
-    user
-  }
-} = await supabase.auth.getUser();
+  const {data: {user}} = await supabase.auth.getUser();
 
-
-console.log(
-  "Middleware user:",
-  user?.email
-);
 
 const publicRoutes = [
   "/login",
