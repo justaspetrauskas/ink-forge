@@ -9,21 +9,12 @@ export default async function Home() {
 
   const supabase = await createClient()
 
-  const {
-    data: {
-      user
-    }
-  } = await supabase.auth.getUser()
-
-
-  if (!user) {
-    redirect("/login")
-  }
+const { data: { user } } = await supabase.auth.getUser()
 
   const { data: profile } = await supabase
     .from("profiles")
     .select("id")
-    .eq("id", user.id)
+    .eq("id", user!.id)
     .maybeSingle()
 
 
@@ -31,17 +22,17 @@ export default async function Home() {
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center gap-4 px-4 py-10 sm:px-6">
       <AuthStoreSync
         user={{
-          id: user.id,
-          email: user.email ?? null
+          id: user!.id,
+          email: user!.email ?? null
         }}
       />
 
       <h1>
-        Welcome {user.email}
+        Welcome {user!.email}
       </h1>
 
       <p>
-        User ID: {user.id}
+        User ID: {user!.id}
       </p>
 
       <p>
