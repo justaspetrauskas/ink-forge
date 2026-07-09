@@ -1,23 +1,17 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Space_Grotesk } from "next/font/google";
+import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 
 import "@/app/globals.css";
 
-const heading = Space_Grotesk({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-heading"
-});
-
-const body = IBM_Plex_Mono({
-  subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["400", "500", "600"]
+  variable: "--font-inter"
 });
 
 export const metadata: Metadata = {
-  title: "INNIT Tattoo AI",
-  description: "Idea to tattoo concept images in minutes."
+  title: "Tatto",
+  description: "Minimal, AI tattoo concept studio."
 };
 
 type RootLayoutProps = {
@@ -26,8 +20,8 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps): ReactNode {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
-      <body className="font-[var(--font-body)] antialiased">{children}</body>
+    <html lang="en" className={inter.variable}>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

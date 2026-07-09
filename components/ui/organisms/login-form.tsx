@@ -38,7 +38,7 @@ export function LoginForm(): ReactElement {
       />
 
       {state.error ? (
-        <p className="text-sm text-red-500" role="alert">
+        <p className="text-sm text-[var(--error)]" role="alert">
           {state.error}
         </p>
       ) : null}

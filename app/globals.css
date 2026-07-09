@@ -3,12 +3,46 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0f0f0f;
-  --panel: #191919;
-  --line: #2a2a2a;
-  --text: #f7f7f7;
-  --muted: #9b9b9b;
-  --accent: #d9d9d9;
+  --brand-primary: #0a0a0a;
+  --brand-secondary: #dc2626;
+  --brand-secondary-hover: #b91c1c;
+  --brand-secondary-active: #991b1b;
+  --accent-foreground: #ffffff;
+  --brand-tertiary: #fafafa;
+
+  --bg-main: #ffffff;
+  --bg-surface: #fafafa;
+  --bg-raised: #f5f5f5;
+
+  --text-primary: #0a0a0a;
+  --text-secondary: #525252;
+  --text-tertiary: #a3a3a3;
+
+  --border-subtle: #f0f0f0;
+  --border-medium: #e5e5e5;
+  --border-strong: #d4d4d4;
+
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #2563eb;
+
+  --accent: var(--brand-secondary);
+  --accent-hover: var(--brand-secondary-hover);
+  --accent-active: var(--brand-secondary-active);
+  --surface-overlay: rgb(255 255 255 / 0.8);
+  --surface-overlay-strong: rgb(255 255 255 / 0.95);
+  --art-canvas-a: #fdfdfd;
+  --art-canvas-b: #f5f5f5;
+
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 20px 50px rgb(0 0 0 / 0.12);
+  --focus-ring: 0 0 0 3px rgba(220, 38, 38, 0.25);
+
+  --font-display: "Geist Sans", "Inter", sans-serif;
+  --font-ui: "Geist Sans", "Inter", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 html,
@@ -18,18 +52,36 @@ body {
 
 body {
   background:
-    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.06), transparent 40%),
-    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.04), transparent 35%),
-    var(--bg);
-  color: var(--text);
+    radial-gradient(circle at 12% 6%, rgba(220, 38, 38, 0.045), transparent 35%),
+    radial-gradient(circle at 100% 0%, rgba(10, 10, 10, 0.035), transparent 40%),
+    var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-ui);
 }
 
 input,
 select,
 textarea {
-  background-color: #151515;
-  border: 1px solid var(--line);
-  color: var(--text);
+  background-color: #ffffff;
+  border: 1px solid var(--border-medium);
+  color: var(--text-primary);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+* {
+  border-color: var(--border-medium);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
 
 button:disabled {

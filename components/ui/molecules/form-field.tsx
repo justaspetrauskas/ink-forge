@@ -11,7 +11,7 @@ type FormFieldProps = {
 
 export function FormField({ id, label, inputProps }: FormFieldProps): ReactElement {
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
       <Input id={id} {...inputProps} />
     </div>

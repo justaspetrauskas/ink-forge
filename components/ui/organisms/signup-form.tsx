@@ -54,7 +54,7 @@ export function SignupForm({ status, message }: SignupFormProps): ReactElement {
 
       {feedbackMessage ? (
         <p
-          className={`text-sm ${feedbackType === "success" ? "text-green-500" : "text-red-500"}`}
+          className={`text-sm ${feedbackType === "success" ? "text-[var(--success)]" : "text-[var(--error)]"}`}
           role={feedbackType === "success" ? "status" : "alert"}
         >
           {feedbackMessage}
@@ -63,7 +63,7 @@ export function SignupForm({ status, message }: SignupFormProps): ReactElement {
 
       {state.success ? (
         <p
-          className="text-sm text-green-500"
+          className="text-sm text-[var(--success)]"
           role="status"
         >
           Account created successfully.
