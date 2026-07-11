@@ -1,82 +1,138 @@
 "use client";
 
 import type { ReactElement, ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import { Wand2, Compass, Bookmark, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type AppShellProps = {
+type NavItemConfig = {
+  href: string;
+  label: string;
+  Icon: LucideIcon;
+};
+
+const navItems: NavItemConfig[] = [
+  { href: "/generator", label: "Generate", Icon: Wand2 },
+  { href: "/home",      label: "Explore",  Icon: Compass  },
+  { href: "/saved",     label: "Saved",    Icon: Bookmark },
+];
+
+type SidebarNavItemProps = {
+  href: string;
+  label: string;
+  Icon: LucideIcon;
+  active: boolean;
+};
+
+function SidebarNavItem({ href, label, Icon, active }: SidebarNavItemProps): ReactElement {
+  return (
+    <Link
+      href={href}
+      aria-label={label}
+      className={[
+        "flex items-center gap-3 rounded-[10px] px-3 py-2.5 text-sm font-medium transition-colors duration-150",
+        active
+          ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
+          : "text-[var(--text-secondary)] hover:bg-[var(--bg-raised)] hover:text-[var(--text-primary)]",
+      ].join(" ")}
+    >
+      <Icon size={20} strokeWidth={1.5} aria-hidden="true" />
+      {label}
+    </Link>
+  );
+}
+
+export type AppShellProps = {
   title: string;
   subtitle?: string;
   children: ReactNode;
 };
 
-const navItems = [
-  { href: "/generator", label: "Generate" },
-  { href: "/home", label: "Gallery" },
-  { href: "/home", label: "Favorites" },
-  { href: "/home", label: "History" },
-  { href: "/home", label: "Account" }
-];
-
 export function AppShell({ title, subtitle, children }: AppShellProps): ReactElement {
   const pathname = usePathname();
 
+  const mobileNavItems: NavItemConfig[] = [
+    ...navItems,
+    { href: "/profile", label: "Profile", Icon: User },
+  ];
+
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1400px] bg-transparent md:px-6">
-      <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-[var(--border-subtle)] bg-[var(--surface-overlay)] px-4 py-8 backdrop-blur md:flex">
-        <div className="mb-10 px-3">
-          <p className="font-semibold tracking-[-0.02em] text-[var(--text-primary)]">Tatto</p>
-          <p className="mt-1 text-xs text-[var(--text-tertiary)]">AI Creative Studio</p>
-        </div>
+    <div className="flex h-screen overflow-hidden bg-[var(--bg-main)]">
+      {/* ── Left Sidebar ── */}
+      <aside className="hidden md:flex w-52 shrink-0 flex-col border-r border-[var(--border-subtle)] px-3 py-6">
+        {/* Brand mark */}
+        <Link
+          href="/generator"
+          aria-label="Tatto AI — home"
+          className="mb-6 flex items-center gap-2 px-3 transition-opacity hover:opacity-60"
+        >
+          <span className="text-sm font-bold uppercase tracking-[0.12em] text-[var(--text-primary)]">Tatto</span>
+          <span className="rounded bg-[var(--accent)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-[var(--accent-foreground)]">AI</span>
+        </Link>
 
-        <nav className="flex flex-col gap-1">
-          {navItems.map((item) => {
-            const active = pathname === item.href;
-
-            return (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={[
-                  "rounded-[10px] px-3 py-2 text-sm transition-colors duration-150",
-                  active
-                    ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
-                    : "text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]"
-                ].join(" ")}
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+        {/* Primary navigation */}
+        <nav className="flex flex-col gap-2" aria-label="Main navigation">
+          {navItems.map(({ href, label, Icon }) => (
+            <SidebarNavItem
+              key={href}
+              href={href}
+              label={label}
+              Icon={Icon}
+              active={pathname === href}
+            />
+          ))}
         </nav>
+
+        {/* Profile — pinned to bottom */}
+        <div className="mt-auto flex flex-col gap-1">
+          <div className="mb-2 h-px bg-[var(--border-subtle)]" />
+          <SidebarNavItem
+            href="/profile"
+            label="Profile"
+            Icon={User}
+            active={pathname === "/profile"}
+          />
+        </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col pb-24 md:pb-0">
-        <header className="border-b border-[var(--border-subtle)] bg-[var(--surface-overlay)] px-4 py-6 backdrop-blur sm:px-8">
-          <h1 className="text-[32px] font-bold leading-tight tracking-[-0.03em] text-[var(--text-primary)]">{title}</h1>
-          {subtitle ? <p className="mt-2 text-sm text-[var(--text-secondary)]">{subtitle}</p> : null}
+      {/* ── Main column ── */}
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        {/* Thin top header */}
+        <header className="flex h-14 shrink-0 items-center gap-3 border-b border-[var(--border-subtle)] px-6">
+          <h1 className="text-sm font-semibold tracking-[-0.01em] text-[var(--text-primary)]">
+            {title}
+          </h1>
+          {subtitle ? (
+            <span className="text-xs text-[var(--text-tertiary)]">{subtitle}</span>
+          ) : null}
         </header>
 
-        <main className="flex-1 px-4 py-6 sm:px-8 sm:py-8">{children}</main>
+        {/* Scrollable workspace */}
+        <main className="flex-1 overflow-y-auto pb-16 md:pb-0">{children}</main>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[var(--border-subtle)] bg-[var(--surface-overlay-strong)] px-2 py-2 backdrop-blur md:hidden">
-        <ul className="mx-auto grid max-w-md grid-cols-5 gap-1">
-          {navItems.map((item) => {
-            const active = pathname === item.href;
-
+      {/* ── Mobile bottom navigation ── */}
+      <nav
+        className="fixed inset-x-0 bottom-0 z-50 flex h-16 items-center border-t border-[var(--border-subtle)] bg-[var(--surface-overlay-strong)] px-2 backdrop-blur md:hidden"
+        aria-label="Mobile navigation"
+      >
+        <ul className="mx-auto grid w-full max-w-sm grid-cols-4">
+          {mobileNavItems.map(({ href, label, Icon }) => {
+            const active = pathname === href;
             return (
-              <li key={item.label}>
+              <li key={href}>
                 <Link
-                  href={item.href}
+                  href={href}
+                  aria-label={label}
                   className={[
-                    "block rounded-[10px] px-2 py-2 text-center text-[12px] font-medium transition-colors duration-150",
+                    "flex flex-col items-center gap-1 py-2 text-[10px] font-medium transition-colors duration-150",
                     active
-                      ? "bg-[var(--accent)] text-[var(--accent-foreground)]"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--bg-surface)]"
+                      ? "text-[var(--accent)]"
+                      : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]",
                   ].join(" ")}
                 >
-                  {item.label}
+                  <Icon size={20} strokeWidth={1.5} aria-hidden="true" />\n                  {label}
                 </Link>
               </li>
             );
