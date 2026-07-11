@@ -60,6 +60,9 @@ export async function updateSession(request: NextRequest) {
 const publicRoutes = [
   "/login",
   "/signup",
+  "/forgot-password",
+  "/auth/callback",
+  "/reset-password",
 ];
 
 const pathname = request.nextUrl.pathname;
