@@ -3,6 +3,7 @@
 import type { ReactElement } from "react";
 import { useActionState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   login,
   loginWithGoogle,
@@ -15,25 +16,43 @@ import { FormField } from "@/components/ui/molecules/form-field";
 
 const initialState: LoginState = {};
 
+const springIn = {
+  type: "spring",
+  stiffness: 320,
+  damping: 28,
+  mass: 0.7,
+} as const;
+
 export function LoginForm(): ReactElement {
   const [state, formAction, pending] = useActionState(login, initialState);
 
   return (
     <>
       <form action={formAction} className="space-y-4">
-        <FormField
-          id="email"
-          label="Email"
-          inputProps={{
-            name: "email",
-            type: "email",
-            autoComplete: "email",
-            required: true,
-            placeholder: "you@example.com",
-          }}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...springIn, delay: 0.02 }}
+        >
+          <FormField
+            id="email"
+            label="Email"
+            inputProps={{
+              name: "email",
+              type: "email",
+              autoComplete: "email",
+              required: true,
+              placeholder: "you@example.com",
+            }}
+          />
+        </motion.div>
 
-        <div className="space-y-2">
+        <motion.div
+          className="space-y-2"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...springIn, delay: 0.06 }}
+        >
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
             <Link
@@ -51,26 +70,53 @@ export function LoginForm(): ReactElement {
             required
             placeholder="Enter your password"
           />
-        </div>
+        </motion.div>
 
         {state.error ? (
-          <p className="text-sm text-[var(--error)]" role="alert">
+          <motion.p
+            className="text-sm text-[var(--error)]"
+            role="alert"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+          >
             {state.error}
-          </p>
+          </motion.p>
         ) : null}
 
-        <Button type="submit" disabled={pending} className="w-full">
-          {pending ? "Logging in..." : "Login"}
-        </Button>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...springIn, delay: 0.1 }}
+          whileHover={{ y: -1 }}
+          whileTap={{ y: 0, scale: 0.995 }}
+        >
+          <Button type="submit" disabled={pending} className="w-full">
+            {pending ? "Logging in..." : "Login"}
+          </Button>
+        </motion.div>
 
-        <div className="flex items-center gap-2 py-1 text-xs text-zinc-500">
+        <motion.div
+          className="flex items-center gap-2 py-1 text-xs text-zinc-500"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25, ease: "easeOut", delay: 0.14 }}
+        >
           <span className="h-px flex-1 bg-[var(--border-medium)]" />
           <span>OR</span>
           <span className="h-px flex-1 bg-[var(--border-medium)]" />
-        </div>
+        </motion.div>
       </form>
 
-      <form action={loginWithGoogle} className="mt-3">
+      <motion.form
+        action={loginWithGoogle}
+        className="mt-3"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ ...springIn, delay: 0.16 }}
+        whileHover={{ y: -1 }}
+        whileTap={{ y: 0, scale: 0.995 }}
+      >
         <input type="hidden" name="next" value="/home" />
         <Button type="submit" variant="secondary" className="w-full">
           <svg
@@ -97,7 +143,7 @@ export function LoginForm(): ReactElement {
           </svg>
           Continue with Google
         </Button>
-      </form>
+      </motion.form>
     </>
   );
 }

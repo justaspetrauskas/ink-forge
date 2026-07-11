@@ -14,10 +14,17 @@ export async function signup(
 ): Promise<SignupState> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
+  const confirmPassword = formData.get("confirmPassword") as string;
 
-  if (!email || !password) {
+  if (!email || !password || !confirmPassword) {
     return {
-      error: "Email and password are required",
+      error: "Email and both password fields are required",
+    };
+  }
+
+  if (password !== confirmPassword) {
+    return {
+      error: "Passwords do not match",
     };
   }
 
@@ -27,8 +34,6 @@ export async function signup(
     email,
     password,
   });
-
-  console.log('data', data);
 
   if (error) {
     return {
