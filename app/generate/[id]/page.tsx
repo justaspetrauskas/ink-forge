@@ -34,7 +34,7 @@ export default async function GenerateResultPage({ params }: GenerateResultPageP
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   const { data, error } = await supabase

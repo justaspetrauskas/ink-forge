@@ -58,14 +58,32 @@ export async function updateSession(request: NextRequest) {
 
 
 const publicRoutes = [
-  "/login",
-  "/signup",
-  "/forgot-password",
+  "/auth/login",
+  "/auth/signup",
+  "/auth/forgot-password",
   "/auth/callback",
-  "/reset-password",
+  "/auth/reset-password",
 ];
 
 const pathname = request.nextUrl.pathname;
+
+const normalizedPathname =
+  pathname.length > 1 && pathname.endsWith("/")
+    ? pathname.slice(0, -1)
+    : pathname;
+
+const legacyAuthRedirects: Record<string, string> = {
+  "/login": "/auth/login",
+  "/signup": "/auth/signup",
+  "/forgot-password": "/auth/forgot-password",
+  "/reset-password": "/auth/reset-password",
+};
+
+const legacyRedirectPath = legacyAuthRedirects[normalizedPathname];
+
+if (legacyRedirectPath) {
+  return NextResponse.redirect(new URL(legacyRedirectPath, request.url));
+}
 
 const isPublicRoute = publicRoutes.some((route) =>
   pathname.startsWith(route)
@@ -74,7 +92,7 @@ const isPublicRoute = publicRoutes.some((route) =>
 
 if (!user && !isPublicRoute) {
   return NextResponse.redirect(
-    new URL("/login", request.url)
+    new URL("/auth/login", request.url)
   );
 }
 

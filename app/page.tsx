@@ -8,7 +8,7 @@ export default async function IndexPage(): Promise<never> {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   redirect("/home");

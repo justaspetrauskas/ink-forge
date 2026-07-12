@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { logout } from "@/app/api/auth/logout/actions";
+import { logout } from "@/app/auth/logout/actions";
 import { Button } from "@/components/ui/atoms/button";
 import { AuthStoreSync } from "@/components/ui/organisms/auth-store-sync";
 import { AppShell } from "@/components/ui/organisms/app-shell";
@@ -39,7 +39,7 @@ export default async function Home() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/auth/login");
   }
 
   const { data: profile } = await supabase.from("profiles").select("id").eq("id", user.id).maybeSingle();

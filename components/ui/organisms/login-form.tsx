@@ -8,7 +8,7 @@ import {
   login,
   loginWithGoogle,
   type LoginState,
-} from "@/app/api/auth/login/actions";
+} from "@/app/auth/login/actions";
 import { Button } from "@/components/ui/atoms/button";
 import { Input } from "@/components/ui/atoms/input";
 import { Label } from "@/components/ui/atoms/label";
@@ -56,7 +56,7 @@ export function LoginForm(): ReactElement {
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
             <Link
-              href="/forgot-password"
+              href="/auth/forgot-password"
               className="text-xs text-zinc-400 underline underline-offset-4 hover:text-zinc-200"
             >
               Forgot password?

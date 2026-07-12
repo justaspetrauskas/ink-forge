@@ -23,7 +23,7 @@ export default async function SignupPage(): Promise<ReactElement> {
 
       <p className="mt-4 text-sm text-zinc-400">
         Already have an account?{" "}
-        <Link href="/login" className="underline underline-offset-4 hover:text-zinc-200">
+        <Link href="/auth/login" className="underline underline-offset-4 hover:text-zinc-200">
           Log in
         </Link>
       </p>

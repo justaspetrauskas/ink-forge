@@ -63,7 +63,7 @@ export async function loginWithGoogle(formData: FormData): Promise<void> {
   });
 
   if (error || !data.url) {
-    redirect(`/login?error=${encodeURIComponent("Unable to start Google login")}`);
+    redirect(`/auth/login?error=${encodeURIComponent("Unable to start Google login")}`);
   }
 
   redirect(data.url);

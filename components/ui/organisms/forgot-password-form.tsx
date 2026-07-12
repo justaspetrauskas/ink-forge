@@ -2,7 +2,7 @@
 
 import type { ReactElement } from "react";
 import { useActionState } from "react";
-import { requestPasswordReset, type ForgotPasswordState } from "@/app/api/auth/forgot-password/actions";
+import { requestPasswordReset, type ForgotPasswordState } from "@/app/auth/forgot-password/actions";
 import { Button } from "@/components/ui/atoms/button";
 import { FormField } from "@/components/ui/molecules/form-field";
 

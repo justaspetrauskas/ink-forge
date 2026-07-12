@@ -30,5 +30,5 @@ export async function resetPassword(
     return { error: "Failed to update password. The link may have expired." };
   }
 
-  redirect("/login");
+  redirect("/auth/login");
 }

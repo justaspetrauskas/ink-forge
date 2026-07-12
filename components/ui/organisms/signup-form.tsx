@@ -3,7 +3,7 @@
 import type { ReactElement } from "react";
 import { useActionState } from "react";
 import { motion } from "framer-motion";
-import { signup, type SignupState } from "@/app/api/auth/signup/actions";
+import { signup, type SignupState } from "@/app/auth/signup/actions";
 import { Button } from "@/components/ui/atoms/button";
 import { FormField } from "@/components/ui/molecules/form-field";
 

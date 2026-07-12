@@ -59,6 +59,6 @@ export default async function GalleryPage(): Promise<ReactElement> {
       </AppShell>
     );
   } catch {
-    redirect("/login");
+    redirect("/auth/login");
   }
 }

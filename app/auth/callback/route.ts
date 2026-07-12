@@ -31,7 +31,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         return NextResponse.redirect(new URL(nextPath, origin));
       }
 
-      return NextResponse.redirect(new URL("/reset-password", origin));
+      return NextResponse.redirect(new URL("/auth/reset-password", origin));
     }
   }
 
@@ -41,9 +41,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       type: type as "recovery",
     });
     if (!error) {
-      return NextResponse.redirect(new URL("/reset-password", origin));
+      return NextResponse.redirect(new URL("/auth/reset-password", origin));
     }
   }
 
-  return NextResponse.redirect(new URL("/login?error=invalid_link", origin));
+  return NextResponse.redirect(new URL("/auth/login?error=invalid_link", origin));
 }
