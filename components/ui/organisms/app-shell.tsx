@@ -15,7 +15,7 @@ type NavItemConfig = {
 const navItems: NavItemConfig[] = [
   { href: "/generate", label: "Generate", Icon: Wand2 },
   { href: "/home",      label: "Explore",  Icon: Compass  },
-  { href: "/saved",     label: "Saved",    Icon: Bookmark },
+  { href: "/gallery",   label: "My Tattoos", Icon: Bookmark },
 ];
 
 type SidebarNavItemProps = {

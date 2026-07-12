@@ -1,8 +1,9 @@
 "use client";
 
 import type { ReactElement } from "react";
-import { useMemo, useState } from "react";
+import { useActionState, useEffect, useMemo, useState } from "react";
 
+import { createTattoo, type CreateTattooState } from "@/app/generate/actions";
 import { Button } from "@/components/ui/atoms/button";
 import {
   LINE_QUALITY_OPTIONS,
@@ -22,7 +23,10 @@ const stepLabels = [
   "4. Generate"
 ] as const;
 
+const initialCreateTattooState: CreateTattooState = {};
+
 export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactElement {
+  const [createState, submitAction, isSubmitting] = useActionState(createTattoo, initialCreateTattooState);
   const [idea, setIdea] = useState("");
   const [selectedStyleLabel, setSelectedStyleLabel] = useState(TATTOO_STYLES[0]?.label ?? "");
   const [selectedSizeLabel, setSelectedSizeLabel] = useState(TATTOO_SIZES[1]?.label ?? TATTOO_SIZES[0]?.label ?? "");
@@ -50,18 +54,34 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
 
   const selectionPayload = useMemo(
     () => ({
-      idea,
+      user_prompt: idea,
       style: selectedStyle?.label ?? "",
-      lineQuality,
-      shading,
       placement,
       size: selectedSize?.label ?? "",
+      line_quality: lineQuality,
+      shading,
+      status: "generating",
     }),
     [idea, lineQuality, placement, selectedSize?.label, selectedStyle?.label, shading]
   );
 
+  const resetForm = (): void => {
+    setIdea("");
+    setSelectedStyleLabel(TATTOO_STYLES[0]?.label ?? "");
+    setSelectedSizeLabel(TATTOO_SIZES[1]?.label ?? TATTOO_SIZES[0]?.label ?? "");
+    setLineQuality(LINE_QUALITY_OPTIONS[0]);
+    setShading(SHADING_OPTIONS[0]);
+    setPlacement("Forearm");
+  };
+
+  useEffect(() => {
+    if (createState.success) {
+      resetForm();
+    }
+  }, [createState.success]);
+
   return (
-    <section className="space-y-6">
+    <form action={submitAction} className="space-y-6">
       <div className="rounded-2xl border border-[var(--border-subtle)] bg-[var(--bg-main)] p-5 shadow-[var(--shadow-sm)] sm:p-6">
         <h2 className="text-[30px] font-semibold leading-[1.04] tracking-[-0.03em] text-[var(--text-primary)]">
           Tattoo Prompt Builder
@@ -90,7 +110,7 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
           </div>
 
           <textarea
-            name="idea"
+            name="user_prompt"
             value={idea}
             onChange={(event) => setIdea(event.target.value.slice(0, MAX_IDEA_LENGTH))}
             placeholder="Example: A storm raven wrapped around a compass with open negative space"
@@ -135,6 +155,7 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
             <label className="space-y-1.5">
               <span className="text-xs font-medium text-[var(--text-secondary)]">Line quality</span>
               <select
+                name="line_quality"
                 value={lineQuality}
                 onChange={(event) => setLineQuality(event.target.value)}
                 className="h-11 w-full rounded-[10px] border border-[var(--border-medium)] px-3 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
@@ -150,6 +171,7 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
             <label className="space-y-1.5">
               <span className="text-xs font-medium text-[var(--text-secondary)]">Shading</span>
               <select
+                name="shading"
                 value={shading}
                 onChange={(event) => setShading(event.target.value)}
                 className="h-11 w-full rounded-[10px] border border-[var(--border-medium)] px-3 text-sm text-[var(--text-primary)] focus:border-[var(--accent)] focus:outline-none"
@@ -165,6 +187,7 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
             <label className="space-y-1.5">
               <span className="text-xs font-medium text-[var(--text-secondary)]">Placement</span>
               <input
+                name="placement"
                 type="text"
                 value={placement}
                 onChange={(event) => setPlacement(event.target.value)}
@@ -205,6 +228,10 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
           <h3 className="text-sm font-semibold text-[var(--text-primary)]">4. Generate</h3>
           <p className="text-xs text-[var(--text-secondary)]">Generate to create your tattoo concept from the selected setup.</p>
 
+          <input type="hidden" name="style" value={selectedStyle?.label ?? ""} />
+          <input type="hidden" name="size" value={selectedSize?.label ?? ""} />
+          <input type="hidden" name="status" value="generating" />
+
           <div className="rounded-lg border border-[var(--border-medium)] bg-[var(--bg-main)] p-3">
             <p className="mb-2 text-xs font-medium text-[var(--text-secondary)]">Selection JSON</p>
             <pre className="max-h-48 overflow-auto text-xs text-[var(--text-secondary)]">
@@ -212,27 +239,32 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
             </pre>
           </div>
 
+          {createState.error ? (
+            <p className="text-sm text-[var(--error)]" role="alert">
+              {createState.error}
+            </p>
+          ) : null}
+
+          {createState.success ? (
+            <p className="text-sm text-[var(--success)]" role="status">
+              {createState.success}
+            </p>
+          ) : null}
+
           <div className="flex flex-wrap gap-3">
-            <Button type="button" disabled={!canGenerate}>
-              Generate Tattoo
+            <Button type="submit" disabled={!canGenerate || isSubmitting}>
+              {isSubmitting ? "Creating..." : "Generate Tattoo"}
             </Button>
             <Button
               type="button"
               variant="secondary"
-              onClick={() => {
-                setIdea("");
-                setSelectedStyleLabel(TATTOO_STYLES[0]?.label ?? "");
-                setSelectedSizeLabel(TATTOO_SIZES[1]?.label ?? TATTOO_SIZES[0]?.label ?? "");
-                setLineQuality(LINE_QUALITY_OPTIONS[0]);
-                setShading(SHADING_OPTIONS[0]);
-                setPlacement("Forearm");
-              }}
+              onClick={resetForm}
             >
               Reset
             </Button>
           </div>
         </section>
       </div>
-    </section>
+    </form>
   );
 }
