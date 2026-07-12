@@ -77,7 +77,7 @@ export default async function Home() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Link href="/generator">
+              <Link href="/generate">
                 <Button type="button">Open Generator</Button>
               </Link>
 
@@ -132,7 +132,7 @@ export default async function Home() {
             <div className="flex items-center justify-between">
               <h3 className="text-[24px] font-semibold tracking-[-0.02em] text-[var(--text-primary)]">Recent Concepts</h3>
               <Link
-                href="/generator"
+                href="/generate"
                 className="text-sm font-medium text-[var(--accent)] transition-colors duration-150 hover:text-[var(--accent-hover)]"
               >
                 Open Generator
@@ -161,7 +161,7 @@ export default async function Home() {
 
             <div className="pt-1">
               <p className="text-sm text-[var(--text-secondary)]">Start your first design and favorite what feels right.</p>
-              <Link href="/generator" className="mt-4 inline-block">
+              <Link href="/generate" className="mt-4 inline-block">
                 <Button type="button">Generate First Concept</Button>
               </Link>
             </div>

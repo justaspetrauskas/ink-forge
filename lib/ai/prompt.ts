@@ -8,6 +8,7 @@ export async function generateTattooPrompt(input: TattooIdeaPayload): Promise<st
     `Linework: ${input.lineQuality}.`,
     `Shading: ${input.shading}.`,
     `Placement target: ${input.placement}.`,
+    `Size target: ${input.size}.`,
     "Output: one centered concept drawing with clean silhouette and strong contrast.",
   ].join(" ");
 }

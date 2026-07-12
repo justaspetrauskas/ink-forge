@@ -13,7 +13,7 @@ type NavItemConfig = {
 };
 
 const navItems: NavItemConfig[] = [
-  { href: "/generator", label: "Generate", Icon: Wand2 },
+  { href: "/generate", label: "Generate", Icon: Wand2 },
   { href: "/home",      label: "Explore",  Icon: Compass  },
   { href: "/saved",     label: "Saved",    Icon: Bookmark },
 ];
@@ -63,7 +63,7 @@ export function AppShell({ title, subtitle, children }: AppShellProps): ReactEle
       <aside className="hidden md:flex w-52 shrink-0 flex-col border-r border-[var(--border-subtle)] px-3 py-6">
         {/* Brand mark */}
         <Link
-          href="/generator"
+          href="/generate"
           aria-label="Tatto AI — home"
           className="mb-6 flex items-center gap-2 px-3 transition-opacity hover:opacity-60"
         >

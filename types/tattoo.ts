@@ -1,9 +1,12 @@
 export type TattooIdeaInput = {
   idea: string;
+  styleId?: string;
   style: string;
   lineQuality: string;
   shading: string;
   placement: string;
+  sizeId?: string;
+  size: string;
 };
 
 export type TattooImageOutput = {
