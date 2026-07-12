@@ -2,12 +2,10 @@ import { z } from "zod";
 
 export const tattooIdeaSchema = z.object({
   idea: z.string().min(5).max(400),
-  styleId: z.string().min(2).max(120).optional(),
   style: z.string().min(2).max(120),
   lineQuality: z.string().min(2).max(120),
   shading: z.string().min(2).max(120),
   placement: z.string().min(2).max(120),
-  sizeId: z.string().min(2).max(120).optional(),
   size: z.string().min(2).max(120),
 });
 

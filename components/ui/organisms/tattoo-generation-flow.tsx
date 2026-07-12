@@ -24,42 +24,40 @@ const stepLabels = [
 
 export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactElement {
   const [idea, setIdea] = useState("");
-  const [styleId, setStyleId] = useState(TATTOO_STYLES[0]?.id ?? "");
-  const [sizeId, setSizeId] = useState(TATTOO_SIZES[1]?.id ?? TATTOO_SIZES[0]?.id ?? "");
+  const [selectedStyleLabel, setSelectedStyleLabel] = useState(TATTOO_STYLES[0]?.label ?? "");
+  const [selectedSizeLabel, setSelectedSizeLabel] = useState(TATTOO_SIZES[1]?.label ?? TATTOO_SIZES[0]?.label ?? "");
   const [lineQuality, setLineQuality] = useState<string>(LINE_QUALITY_OPTIONS[0]);
   const [shading, setShading] = useState<string>(SHADING_OPTIONS[0]);
   const [placement, setPlacement] = useState("Forearm");
 
   const selectedStyle = useMemo(
-    () => TATTOO_STYLES.find((style) => style.id === styleId) ?? TATTOO_STYLES[0],
-    [styleId]
+    () => TATTOO_STYLES.find((style) => style.label === selectedStyleLabel) ?? TATTOO_STYLES[0],
+    [selectedStyleLabel]
   );
 
   const selectedSize = useMemo(
-    () => TATTOO_SIZES.find((size) => size.id === sizeId) ?? TATTOO_SIZES[0],
-    [sizeId]
+    () => TATTOO_SIZES.find((size) => size.label === selectedSizeLabel) ?? TATTOO_SIZES[0],
+    [selectedSizeLabel]
   );
 
   const remainingCharacters = MAX_IDEA_LENGTH - idea.length;
 
   const canGenerate =
     idea.trim().length >= 5 &&
-    Boolean(selectedStyle?.id) &&
-    Boolean(selectedSize?.id) &&
+    Boolean(selectedStyle?.label) &&
+    Boolean(selectedSize?.label) &&
     placement.trim().length >= 2;
 
   const selectionPayload = useMemo(
     () => ({
       idea,
-      styleId: selectedStyle?.id ?? "",
       style: selectedStyle?.label ?? "",
       lineQuality,
       shading,
       placement,
-      sizeId: selectedSize?.id ?? "",
       size: selectedSize?.label ?? "",
     }),
-    [idea, lineQuality, placement, selectedSize?.id, selectedSize?.label, selectedStyle?.id, selectedStyle?.label, shading]
+    [idea, lineQuality, placement, selectedSize?.label, selectedStyle?.label, shading]
   );
 
   return (
@@ -105,13 +103,13 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
 
           <div className="flex flex-wrap gap-2">
             {TATTOO_STYLES.map((style) => {
-              const active = style.id === styleId;
+              const active = style.label === selectedStyleLabel;
               return (
                 <button
-                  key={style.id}
+                  key={style.label}
                   type="button"
                   onClick={() => {
-                    setStyleId(style.id);
+                    setSelectedStyleLabel(style.label);
                     setLineQuality(style.recommendedLineQuality);
                     setShading(style.recommendedShading);
                   }}
@@ -181,12 +179,12 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
           <h3 className="text-lg font-semibold text-[var(--text-primary)]">3. Choose size</h3>
           <div className="grid gap-3 sm:grid-cols-3">
             {TATTOO_SIZES.map((size) => {
-              const active = size.id === sizeId;
+              const active = size.label === selectedSizeLabel;
               return (
                 <button
-                  key={size.id}
+                  key={size.label}
                   type="button"
-                  onClick={() => setSizeId(size.id)}
+                  onClick={() => setSelectedSizeLabel(size.label)}
                   className={[
                     "rounded-xl border p-3 text-left transition-all duration-150",
                     active
@@ -223,8 +221,8 @@ export function TattooGenerationFlow(_props: TattooGenerationFlowProps): ReactEl
               variant="secondary"
               onClick={() => {
                 setIdea("");
-                setStyleId(TATTOO_STYLES[0]?.id ?? "");
-                setSizeId(TATTOO_SIZES[1]?.id ?? TATTOO_SIZES[0]?.id ?? "");
+                setSelectedStyleLabel(TATTOO_STYLES[0]?.label ?? "");
+                setSelectedSizeLabel(TATTOO_SIZES[1]?.label ?? TATTOO_SIZES[0]?.label ?? "");
                 setLineQuality(LINE_QUALITY_OPTIONS[0]);
                 setShading(SHADING_OPTIONS[0]);
                 setPlacement("Forearm");
